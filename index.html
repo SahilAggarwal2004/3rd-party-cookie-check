@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <script>
+        const checkCookiesEnable = () => {
+            let isCookieEnabled = window.navigator.cookieEnabled;
+            if (typeof window.navigator.cookieEnabled == "undefined" && !isCookieEnabled) {
+                document.cookie = "testcookie";
+                isCookieEnabled = document.cookie.indexOf("testcookie") != -1;
+            }
+            return isCookieEnabled;
+        }
+        window.addEventListener('message', event => {
+            try {
+                if (JSON.parse(event.data)['test'] !== 'cookie') return
+                parent.postMessage(JSON.stringify({ result: checkCookiesEnable() }), event.origin)
+            }
+            catch { }
+        })
+    </script>
+</body>
+
+</html>
